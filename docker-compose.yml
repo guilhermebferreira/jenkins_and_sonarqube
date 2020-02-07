@@ -39,6 +39,22 @@ services:
       - postgresql:/var/lib/postgresql
       - postgresql_data:/var/lib/postgresql/data
 
+
+  phpfpm:
+      image: php:fpm
+      ports:
+          - 9090:9000
+      volumes:      
+          - ./app:/usr/share/nginx/html
+
+  composer:
+      image: composer/composer:php7
+      networks:
+        - sonarnet
+      command: install
+      volumes: 
+        - ./app:/app
+
 networks:
   sonarnet:
     driver: bridge
