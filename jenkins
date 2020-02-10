@@ -31,6 +31,9 @@ RUN apt-get -qqy install \
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get install -y nodejs
 
+# mavem
+RUN apt-get install -y maven
+
 # yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN sh -c 'echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list'
@@ -59,11 +62,16 @@ RUN wget -q -O /usr/bin/composer https://getcomposer.org/composer.phar && chmod 
 # legacy
 RUN npm install -g gulp
 
+# java
+RUN add-apt-repository ppa:webupd8team/java -y 
+RUN apt-get update -y
+RUN apt-get install oracle-java8-installer -y
+
 # ansible
-RUN sh -c 'echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" | tee /etc/apt/sources.list.d/ansible.list'
-RUN apt-key adv --keyserver keyserver.ubuntu.com --no-tty --recv-keys 93C4A3FD7BB9C367
-RUN apt update
-RUN apt install -qqy ansible
+#RUN sh -c 'echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" | tee /etc/apt/sources.list.d/ansible.list'
+#RUN apt-key adv --keyserver keyserver.ubuntu.com --no-tty --recv-keys 93C4A3FD7BB9C367
+#RUN apt update
+#RUN apt install -qqy ansible
 
 # alias
 RUN echo "alias ll='ls $LS_OPTIONS -la --color=auto'" >>  /etc/profile
@@ -81,8 +89,8 @@ RUN install-plugins.sh \
     credentials-binding \
     github-branch-source \
     warnings-ng \
-    blueocean \
-    slack \
+    git \
+    sonar \
     workflow-aggregator \
     clover \
     htmlpublisher \
