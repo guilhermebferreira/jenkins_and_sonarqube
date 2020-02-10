@@ -1,0 +1,39 @@
+#!/usr/bin/env groovy
+
+node('master') {
+    try {
+
+
+        stage('build') {
+ 
+
+            // Install dependencies, create a new .env file and generate a new key, just for testing
+            sh "composer install"
+
+            // Run any static asset building, if needed
+            // sh "npm install && gulp --production"
+        }
+
+
+		stage('SonarQube analysis') {
+
+			withSonarQubeEnv('sonar') {
+
+				sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar -Dsonar.projectKey=matomo -Dsonar.host.url=http://127.0.0.1:9000 -Dsonar.login=d106b39bddb54f4ef158e29d1147185c8e05c5e7'
+
+			}
+
+		}
+
+        stage('deploy') {
+            // If we had ansible installed on the server, setup to run an ansible playbook
+            // sh "ansible-playbook -i ./ansible/hosts ./ansible/deploy.yml"
+            sh "echo 'WE ARE DEPLOYING'"
+        }
+    } catch(error) {
+        throw error
+    } finally {
+        // Any cleanup operations needed, whether we hit an error or not
+    }
+
+}
